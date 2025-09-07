@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Financial Manager</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #6dd5ed, #2193b0);
+      margin: 0;
+      padding: 0;
+      color: #fff;
+      text-align: center;
+    }
+    header {
+      padding: 20px;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: rgba(0,0,0,0.6);
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+    input, button {
+      padding: 10px;
+      margin: 10px;
+      border-radius: 10px;
+      border: none;
+      font-size: 16px;
+    }
+    input {
+      width: 80%;
+    }
+    button {
+      background: #ff9800;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #e68900;
+      transform: scale(1.05);
+    }
+    .result-card {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 12px;
+      background: #333;
+      animation: fadeIn 1s;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+    canvas {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <header>💰 Financial Manager</header>
+
+  <div class="container">
+    <h2>Enter Your Salary</h2>
+    <input type="number" id="salary" placeholder="Enter salary amount"><br>
+    <button onclick="calculate()">Calculate</button>
+
+    <div id="result"></div>
+    <canvas id="myChart"></canvas>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    function calculate() {
+      let salary = document.getElementById("salary").value;
+      if (salary === "" || salary <= 0) {
+        alert("Please enter a valid salary!");
+        return;
+      }
+      let savings = salary * 0.4;
+      let food = salary * 0.3;
+      let entertainment = salary * 0.2;
+      let other = salary * 0.1;
+
+      document.getElementById("result").innerHTML = `
+        <div class="result-card">
+          <h3>Breakdown</h3>
+          <p>💵 Savings: ₹${savings.toFixed(2)}</p>
+          <p>🍔 Food: ₹${food.toFixed(2)}</p>
+          <p>🎬 Entertainment: ₹${entertainment.toFixed(2)}</p>
+          <p>📌 Other: ₹${other.toFixed(2)}</p>
+        </div>
+      `;
+
+      // Chart
+      const ctx = document.getElementById('myChart');
+      new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: ['Savings', 'Food', 'Entertainment', 'Other'],
+          datasets: [{
+            data: [savings, food, entertainment, other],
+            backgroundColor: ['#4caf50', '#ff5722', '#2196f3', '#ffc107'],
+          }]
+        }
+      });
+    }
+  </script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+</body>
+</html>
